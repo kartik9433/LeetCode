@@ -1,25 +1,51 @@
+class Pair{
+    int row;
+    int col;
+    Pair(int row,int col){
+        this.row = row;
+        this.col = col;
+    }
+}
 class Solution {
     public int maxAreaOfIsland(int[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-        int island = 0;
+        int n = grid.length; 
+        int m = grid[0].length;
 
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
+        int max = 0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
                 if(grid[i][j] == 1){
-                 island =  Math.max(island,dfs(i,j,grid,m,n));
-                    
+                   max = Math.max(max,bfs(i,j,grid));
                 }
             }
         }
-        return island;        
+        return max;
     }
-    public int  dfs(int i,int j,int grid[][],int n,int m){
-        if(i<0 || j<0 || i>=n || j>=m || grid[i][j] == 0){
-            return 0;
-        }
-        grid[i][j] = 0;
+    public int  bfs(int sr,int sc,int grid[][]){
+        Queue<Pair>q = new LinkedList<>();
+        q.add(new Pair(sr,sc));
 
-        return 1 + dfs(i+1,j,grid,n,m) + dfs(i,j+1,grid,n,m) + dfs(i-1,j,grid,n,m) + dfs(i,j-1,grid,n,m);
+        int area = 0;
+
+        grid[sr][sc] = 0; // visited
+
+        int dr[] = {0,0,-1,1};
+        int dc[] = {1,-1,0,0}; 
+
+        while(!q.isEmpty()){
+            Pair p = q.remove();
+            int x = p.row;
+            int y = p.col;
+            area++;
+            for(int i=0;i<4;i++){
+                int r = x + dr[i];
+                int c = y + dc[i];
+                if(r>=0 && c>=0 && r<grid.length && c<grid[0].length && grid[r][c]==1){
+                    q.add(new Pair(r,c));
+                    grid[r][c] = 0;
+                }
+            }
+        }
+        return area;
     }
 }
