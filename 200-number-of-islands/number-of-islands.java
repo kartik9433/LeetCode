@@ -1,29 +1,50 @@
+class Pair{
+    int row;
+    int col;
+    Pair(int row,int col){
+        this.row = row;
+        this.col = col;
+    }
+}
 class Solution {
     public int numIslands(char[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
-        int island = 0;
+        int count = 0;
+        int n = grid.length;
+        int m = grid[0].length;
 
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
                 if(grid[i][j] == '1'){
-                    dfs(i,j,grid,m,n);
-                    island++;
+                    bfs(i,j,grid);
+                    count++;
                 }
             }
         }
-        return island;
+        
+        return count;
     }
-    public void dfs(int i,int j,char grid[][],int n,int m){
-        if(i<0 || j<0 || i>=n || j>=m || grid[i][j] == '0'){
-            return;
+    public void bfs(int sr ,int sc,char grid[][]){
+        Queue<Pair>q = new LinkedList<>();
+        q.add(new Pair(sr,sc));
+        grid[sr][sc] = '0';
+
+        int dr[] = {0,0,1,-1}; 
+        int dc[] = {-1,1,0,0};
+
+        while(!q.isEmpty()){
+           Pair p = q.remove();
+           int r = p.row; 
+           int c = p.col;
+           for(int i=0;i<4;i++){
+               int nrw =  r + dr[i];
+               int ncl =  c + dc[i];
+               if(nrw >= 0 && ncl>=0 && nrw <grid.length && ncl<grid[0].length &&
+               grid[nrw][ncl] == '1'){
+                q.add(new Pair(nrw,ncl));
+                 grid[nrw][ncl] = '0';
+               }
+           }
         }
-        grid[i][j] = '0';
-
-        dfs(i+1,j,grid,n,m);
-        dfs(i,j+1,grid,n,m);
-        dfs(i-1,j,grid,n,m);
-        dfs(i,j-1,grid,n,m);
+        return ;
     }
-
 }
