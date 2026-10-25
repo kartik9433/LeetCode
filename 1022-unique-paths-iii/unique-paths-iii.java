@@ -28,13 +28,13 @@ class Solution {
             }
             return 0;
         }
-        int temp = grid[sr][sc];
+
         grid[sr][sc] = -1;
         zero--;
         int count = dfs(sr+1,sc,zero,grid) + dfs(sr,sc+1,zero,grid)+
                     dfs(sr-1,sc,zero,grid) + dfs(sr,sc-1,zero,grid);
-        
-        grid[sr][sc] = temp;
+        grid[sr][sc] = 0;
+        zero++;
 
         return count;
     }
